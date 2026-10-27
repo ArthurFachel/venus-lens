@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0B0B0E</color>
+    <color name="card">#16181F</color>
+    <color name="surface">#1D2029</color>
+    <color name="cream">#F3EEE6</color>
+    <color name="cream_74">#BDF3EEE6</color>
+    <color name="cream_50">#80F3EEE6</color>
+    <color name="cream_30">#4DF3EEE6</color>
+    <color name="cream_20">#33F3EEE6</color>
+    <color name="cream_12">#1FF3EEE6</color>
+    <color name="cream_09">#17F3EEE6</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_85">#D9FFFFFF</color>
+    <color name="white_55">#8CFFFFFF</color>
+    <color name="pill">#29FFFFFF</color>
+    <color name="gold">#E3B448</color>
+    <color name="on_gold">#17120A</color>
+    <color name="terracota">#A33B20</color>
+    <color name="green">#199D3F</color>
+    <color name="err_text">#E8865A</color>
+    <color name="warn">#E3B448</color>
+</resources>

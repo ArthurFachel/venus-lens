@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="12dp">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/icon_btn"
+            android:contentDescription="Voltar"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            android:tint="@color/cream" />
+
+        <TextView
+            style="@style/T.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="Ajustes"
+            android:textColor="@color/cream"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="20dp">
+
+            <!-- CAPTURA -->
+            <TextView style="@style/Overline" android:textSize="12sp" android:text="CAPTURA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_surface18"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView style="@style/FieldLabel" android:text="Taxa de frames" />
+
+                <LinearLayout
+                    android:id="@+id/fpsGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_seg14"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <TextView android:id="@+id/fps1" style="@style/SegButton" android:text="1 fps" />
+                    <View android:layout_width="6dp" android:layout_height="match_parent" />
+                    <TextView android:id="@+id/fps2" style="@style/SegButton" android:text="2 fps" />
+                    <View android:layout_width="6dp" android:layout_height="match_parent" />
+                    <TextView android:id="@+id/fps5" style="@style/SegButton" android:text="5 fps" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:layout_marginTop="12dp"
+                    android:text="Resolução enviada" />
+
+                <TextView
+                    android:id="@+id/resolution"
+                    style="@style/FieldLight"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_chevron_down"
+                    android:drawableTint="@color/bg"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:fontVariationSettings="'wght' 600"
+                    android:text="720p · recomendado" />
+
+                <TextView
+                    android:id="@+id/dataHint"
+                    style="@style/T.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="@color/cream_74"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- MODELO -->
+            <TextView
+                style="@style/Overline"
+                android:layout_marginTop="16dp"
+                android:text="MODELO"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_surface18"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView style="@style/FieldLabel" android:text="Endpoint" />
+
+                <EditText
+                    android:id="@+id/endpoint"
+                    style="@style/FieldLight"
+                    android:inputType="textUri" />
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:layout_marginTop="12dp"
+                    android:text="Chave de API" />
+
+                <EditText
+                    android:id="@+id/token"
+                    style="@style/FieldLight"
+                    android:hint="token do servidor"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+
+            <!-- VOZ E ENERGIA -->
+            <TextView
+                style="@style/Overline"
+                android:layout_marginTop="16dp"
+                android:text="VOZ E ENERGIA"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_surface18"
+                android:orientation="vertical"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="4dp">
+
+                <Switch android:id="@+id/swSpeak" style="@style/VSwitch" android:text="Falar a resposta em voz alta" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@drawable/divider" />
+                <Switch android:id="@+id/swScreen" style="@style/VSwitch" android:text="Pausar com a tela apagada" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@drawable/divider" />
+                <Switch android:id="@+id/swScene" style="@style/VSwitch" android:text="Enviar só quando a cena mudar" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@drawable/divider" />
+                <Switch android:id="@+id/swHeadset" style="@style/VSwitch" android:text="Botão do fone faz a pergunta" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/addTile"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_outline16"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_power"
+                    android:tint="@color/cream" />
+
+                <TextView
+                    style="@style/T.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Adicionar ao painel rápido"
+                    android:textColor="@color/cream"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/openDebug"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_outline16"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_code"
+                    android:tint="@color/cream" />
+
+                <TextView
+                    style="@style/T.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Abrir depuração"
+                    android:textColor="@color/cream"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

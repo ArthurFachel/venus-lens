@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <!-- header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="Venus"
+            android:src="@drawable/venus_logo" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/icon_btn"
+            android:contentDescription="Abrir ajustes"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sliders"
+            android:tint="@color/cream" />
+    </LinearLayout>
+
+    <!-- viewport -->
+    <FrameLayout
+        android:id="@+id/viewport"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_card">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/frozen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Foto capturada"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <dev.fachel.venuslens.BracketsView
+            android:id="@+id/brackets"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- off -->
+        <LinearLayout
+            android:id="@+id/offPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ImageView
+                android:id="@+id/offIcon"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:alpha="0.45"
+                android:contentDescription="@null"
+                android:src="@drawable/venus_emblem" />
+
+            <TextView
+                android:id="@+id/offTitle"
+                style="@style/T.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Câmera desligada"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/offText"
+                style="@style/T.Body"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.2"
+                android:text="Escolha o modo de captura e ligue o assistente para ele enxergar o que você enxerga."
+                android:textColor="#D1FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- listening -->
+        <LinearLayout
+            android:id="@+id/listenPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="28dp"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="104dp"
+                android:layout_height="104dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ring_fill" />
+
+                <View
+                    android:id="@+id/ring"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ring" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_mic"
+                    android:tint="@color/white" />
+            </FrameLayout>
+
+            <dev.fachel.venuslens.WaveView
+                android:id="@+id/wave"
+                android:layout_width="65dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="22dp" />
+
+            <TextView
+                android:id="@+id/listenTitle"
+                style="@style/T.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Ouvindo…"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/listenText"
+                style="@style/T.Body"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.2"
+                android:text="Fale sua pergunta. Eu paro de ouvir quando você fizer uma pausa."
+                android:textColor="@color/white_85"
+                android:textSize="15sp" />
+
+            <TextView
+                style="@style/T.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:letterSpacing="0.04"
+                android:text="PT-BR · FALE AGORA"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- status pill -->
+        <LinearLayout
+            android:id="@+id/statusPill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:background="@drawable/pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="7dp">
+
+            <ImageView
+                android:id="@+id/statusDot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:contentDescription="@null"
+                android:src="@drawable/dot" />
+
+            <ImageView
+                android:id="@+id/statusCam"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_camera"
+                android:tint="@color/white"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/statusText"
+                style="@style/T.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:letterSpacing="0.03"
+                android:text="Desligado"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/infoPill"
+            style="@style/T.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="14dp"
+            android:background="@drawable/pill"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="7dp"
+            android:text="2 fps · 720p"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/discard"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="10dp"
+            android:background="@drawable/icon_btn"
+            android:contentDescription="Descartar foto"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_close"
+            android:tint="@color/white"
+            android:visibility="gone" />
+
+        <!-- streaming answer overlay -->
+        <LinearLayout
+            android:id="@+id/respOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="14dp"
+            android:background="@drawable/bg_resp_overlay"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Overline"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="RESPOSTA" />
+
+                <TextView
+                    android:id="@+id/respMeta"
+                    style="@style/T.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cream_74"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/respText"
+                style="@style/T.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="7"
+                android:ellipsize="end"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/respQuestion"
+                style="@style/T.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/cream_74"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- photo-mode answer panel -->
+    <LinearLayout
+        android:id="@+id/photoPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_surface20"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Overline"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="RESPOSTA" />
+
+            <TextView
+                android:id="@+id/photoMeta"
+                style="@style/T.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/cream_74"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="9dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/photoQuestion"
+                    style="@style/T.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="@color/cream_74"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/photoAnswer"
+                    style="@style/T.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:lineSpacingMultiplier="1.25"
+                    android:textIsSelectable="true"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/photoActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/copy"
+                style="@style/T.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:background="@drawable/btn_outline14"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_copy"
+                android:drawablePadding="7dp"
+                android:drawableTint="@color/cream"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Copiar"
+                android:textColor="@color/cream"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/listen"
+                style="@style/T.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_outline14"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_speaker"
+                android:drawablePadding="7dp"
+                android:drawableTint="@color/cream"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Ouvir"
+                android:textColor="@color/cream"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- controls (children reordered in code per mode) -->
+    <LinearLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="22dp">
+
+        <LinearLayout
+            android:id="@+id/seg"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/bg_seg"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/segStream"
+                style="@style/SegButton"
+                android:drawableStart="@drawable/ic_streaming"
+                android:text="Streaming" />
+
+            <View
+                android:layout_width="6dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/segPhoto"
+                style="@style/SegButton"
+                android:drawableStart="@drawable/ic_camera"
+                android:text="Foto única" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mainRow"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/secondaryBtn"
+                style="@style/T.Bold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_outline"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="Cancelar"
+                android:textColor="@color/cream"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/mainBtn"
+                style="@style/T.Black"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_gold"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_power"
+                android:drawablePadding="10dp"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="Ligar assistente"
+                android:textColor="@color/on_gold"
+                android:textSize="17sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/inputRow"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/orType"
+                style="@style/T.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Ou digite:"
+                android:textColor="@color/cream_74"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/input"
+                style="@style/T.Body"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="Escreva uma pergunta…"
+                android:imeOptions="actionSend"
+                android:inputType="textCapSentences"
+                android:paddingHorizontal="16dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/mic"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/sq_gold"
+                android:contentDescription="Perguntar por voz"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_mic"
+                android:tint="@color/on_gold" />
+
+            <ImageButton
+                android:id="@+id/send"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/sq_outline"
+                android:contentDescription="Enviar pergunta"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_send"
+                android:tint="@color/cream_50" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

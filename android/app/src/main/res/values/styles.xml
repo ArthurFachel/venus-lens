@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="T" />
+    <style name="T.Body"><item name="android:fontFamily">@font/nunito</item><item name="android:textColor">@color/cream</item></style>
+    <style name="T.Bold"><item name="android:fontFamily">@font/nunito</item><item name="android:fontVariationSettings">"'wght' 700"</item></style>
+    <style name="T.Black"><item name="android:fontFamily">@font/nunito</item><item name="android:fontVariationSettings">"'wght' 800"</item></style>
+    <style name="T.Semi"><item name="android:fontFamily">@font/nunito</item><item name="android:fontVariationSettings">"'wght' 600"</item></style>
+    <style name="Overline">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:fontVariationSettings">"'wght' 800"</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textColor">@color/cream_74</item>
+    </style>
+    <style name="FieldLight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/field_light</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/bg</item>
+        <item name="android:textColorHint">#990B0B0E</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito</item>
+    </style>
+    <style name="FieldLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/cream</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:fontVariationSettings">"'wght' 700"</item>
+    </style>
+    <style name="SegButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:fontVariationSettings">"'wght' 700"</item>
+        <item name="android:drawablePadding">7dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+    <style name="VSwitch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cream</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:fontVariationSettings">"'wght' 600"</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="android:track">@drawable/switch_track</item>
+        <item name="android:switchMinWidth">52dp</item>
+        <item name="android:background">@null</item>
+    </style>
+</resources>

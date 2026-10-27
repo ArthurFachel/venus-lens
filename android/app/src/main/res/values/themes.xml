@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.VenusLens" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorAccent">@color/gold</item>
+        <item name="android:textColorPrimary">@color/cream</item>
+        <item name="android:textColorSecondary">@color/cream_74</item>
+        <item name="android:textColorHint">@color/cream_50</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textCursorDrawable">@drawable/cursor</item>
+    </style>
+</resources>
