@@ -12,6 +12,7 @@ Transport:
 from __future__ import annotations
 
 import asyncio
+import base64
 import contextlib
 import json
 import logging
@@ -19,15 +20,17 @@ import secrets
 import time
 import uuid
 from contextlib import asynccontextmanager
+from datetime import datetime
 from typing import Awaitable, Callable
 
 import httpx
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile, WebSocket, \
     WebSocketDisconnect
 
+from . import journal
 from .config import CAREFUL_HINTS, Settings
 from .deepinfra import DeepInfra, DeepInfraError
-from .session import BadImage, Session, sniff_audio_name
+from .session import BadImage, Frame, Session, sniff_audio_name
 
 log = logging.getLogger("venus_lens")
 Emit = Callable[[dict], Awaitable[None]]
@@ -52,6 +55,37 @@ def append_log(s: Settings, record: dict) -> None:
             fh.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError as e:
         log.warning("log write failed: %s", e)
+
+
+def spawn_bg(app: FastAPI, coro) -> asyncio.Task:
+    """Background work that must outlive the request (and a superseding question)."""
+    task = asyncio.create_task(coro)
+    app.state.bg.add(task)
+    task.add_done_callback(app.state.bg.discard)
+    return task
+
+
+async def write_note(app: FastAPI, entry: journal.Entry, question: str, frame: Frame | None) -> None:
+    """Journal one interaction. For "guarda isso" with a frame: save it and ask for a faithful note."""
+    s: Settings = app.state.settings
+    base = s.journal_path
+    try:
+        if entry.saved and frame is not None:
+            entry.image = await asyncio.to_thread(journal.save_image, base, entry.when, entry.req_id, frame.jpeg)
+            content = [{"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,"
+                                                            + base64.b64encode(frame.jpeg).decode()}},
+                       {"type": "text", "text": f"Pedido do usuário: {question}"}]
+            msgs = [{"role": "system", "content": journal.NOTE_PROMPT}, {"role": "user", "content": content}]
+            try:
+                parts = [str(v) async for k, v in app.state.di.chat_stream(
+                    s.model_careful, msgs, s.note_max_tokens) if k == "delta"]
+                entry.note = "".join(parts).strip() or "(o modelo não devolveu nada)"
+            except DeepInfraError as e:
+                entry.note = f"(a nota falhou: {e})"
+        async with app.state.journal_lock:
+            await asyncio.to_thread(journal.append, base, entry)
+    except OSError as e:
+        log.warning("journal write failed: %s", e)
 
 
 async def run_ask(app: FastAPI, session: Session, emit: Emit, *, req_id: str,
@@ -91,9 +125,14 @@ async def run_ask(app: FastAPI, session: Session, emit: Emit, *, req_id: str,
     lat["total_ms"] = int((time.perf_counter() - t0) * 1000)
 
     session.remember(question, answer)
+    saved = s.journal and journal.wants_save(question) and frame is not None
+    if s.journal:
+        entry = journal.Entry(when=datetime.now(), question=question, answer=answer, model=model,
+                              had_frame=frame is not None, req_id=req_id, saved=saved)
+        spawn_bg(app, write_note(app, entry, question, frame if saved else None))
     cost = await di.cost_usd(model, usage)  # type: ignore[arg-type]
     result = {"type": "answer", "id": req_id, "text": answer, "question": question,
-              "model": model, "had_frame": frame is not None,
+              "model": model, "had_frame": frame is not None, "saved": saved,
               "frame_age_s": frame_age,
               "latency_ms": lat, "usage": usage, "cost_usd": cost}
     append_log(s, {"ts": time.time(), **{k: v for k, v in result.items() if k != "type"}})
@@ -122,10 +161,14 @@ def create_app(settings: Settings | None = None,
             log.warning("token do app ausente: todas as rotas protegidas vao responder 401")
         app.state.di = DeepInfra(s.deepinfra_key, s.base_url, transport=transport)
         yield
+        if app.state.bg:  # let pending journal notes finish before closing the client
+            await asyncio.wait(set(app.state.bg), timeout=60)
         await app.state.di.aclose()
 
     app = FastAPI(title="Venus Lens", version="0.1.0", lifespan=lifespan)
     app.state.settings = s
+    app.state.bg = set()
+    app.state.journal_lock = asyncio.Lock()
 
     @app.get("/health")
     async def health():

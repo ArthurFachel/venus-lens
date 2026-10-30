@@ -76,4 +76,10 @@ Simulate the phone:
 
 ## Logs
 
-`$VENUS_LENS_DATA_DIR/interactions.jsonl`: question, answer, model, latency, cost. Images are never stored.
+`$VENUS_LENS_DATA_DIR/interactions.jsonl`: question, answer, model, latency, cost. No images.
+
+## Journal
+
+Every answer is also appended to a Markdown note of the day, `$VENUS_LENS_DATA_DIR/diario/YYYY-MM-DD.md` (set `VENUS_LENS_JOURNAL_DIR` to point it at an Obsidian vault, `VENUS_LENS_JOURNAL=0` to turn it off).
+
+Asking to keep something with the camera on ("guarda esse quadro", "anota isso", "salva essa página") saves that frame under `diario/img/` and runs a second call on the careful model that transcribes what is legible into a `### Nota` section. That call runs in the background, so the spoken answer is not delayed, and the answer carries `"saved": true`. These are the only images the backend ever writes to disk.

@@ -43,7 +43,9 @@ SYSTEM_PROMPT = (
     "Responda em português do Brasil, curto e natural, porque a resposta vai ser lida em voz alta: "
     "sem markdown, sem listas, sem emojis, no máximo 3 frases. "
     "Se não der pra ler ou identificar algo com clareza, diga isso em vez de chutar. "
-    "Se não houver imagem, responda só com base na pergunta e avise que não está vendo nada."
+    "Se não houver imagem, responda só com base na pergunta e avise que não está vendo nada. "
+    "Se pedirem pra guardar, anotar ou salvar algo, confirme numa frase curta o que vai ficar guardado: "
+    "a transcrição completa vai pro diário separadamente."
 )
 
 CAREFUL_HINTS = ("lê ", "leia", "ler ", "o que está escrito", "o que ta escrito", "o que tá escrito",
@@ -71,8 +73,16 @@ class Settings:
     data_dir: Path = field(default_factory=lambda: HOME / ".local/share/venus-lens")
     log_images: bool = False
     system_prompt: str = SYSTEM_PROMPT
+    # Daily Markdown journal (journal.py). Off with VENUS_LENS_JOURNAL=0.
+    journal: bool = True
+    journal_dir: Path | None = None  # default: <data_dir>/diario
+    note_max_tokens: int = 900
     host: str = "0.0.0.0"
     port: int = 8765
+
+    @property
+    def journal_path(self) -> Path:
+        return self.journal_dir or self.data_dir / "diario"
 
     @classmethod
     def from_env(cls, path: Path | None = None) -> "Settings":
@@ -91,6 +101,9 @@ class Settings:
         if get("VENUS_LENS_DATA_DIR"):
             s.data_dir = Path(get("VENUS_LENS_DATA_DIR")).expanduser()
         s.log_images = get("VENUS_LENS_LOG_IMAGES", "0") == "1"
+        s.journal = get("VENUS_LENS_JOURNAL", "1") != "0"
+        if get("VENUS_LENS_JOURNAL_DIR"):
+            s.journal_dir = Path(get("VENUS_LENS_JOURNAL_DIR")).expanduser()
         s.host = get("VENUS_LENS_HOST", s.host)
         s.port = int(get("VENUS_LENS_PORT", str(s.port)))
         return s

@@ -177,6 +177,61 @@ def test_stale_frame_ignored():
     assert s.latest_frame(15) is not None
 
 
+def test_journal_plain_question(tmp_path):
+    c, fake = make(tmp_path)
+    with c:
+        r = c.post("/v1/ask", headers={"X-API-Key": TOKEN}, data={"question": "que horas são em Tóquio?"})
+    assert r.status_code == 200 and r.json()["saved"] is False
+    days = list((tmp_path / "diario").glob("*.md"))
+    assert len(days) == 1
+    text = days[0].read_text()
+    assert text.startswith("# Venus Lens, ") and "que horas são em Tóquio?" in text
+    assert "São bananas maduras." in text and "sem câmera" in text and "### Nota" not in text
+    assert not (tmp_path / "diario" / "img").exists() and len(fake.chat_bodies) == 1
+
+
+def test_journal_save_request_keeps_frame_and_note(tmp_path):
+    c, fake = make(tmp_path)
+    with c:
+        with c.websocket_connect("/v1/ws", headers={"X-API-Key": TOKEN}) as ws:
+            ws.receive_text()
+            ws.send_bytes(bytes([KIND_FRAME]) + jpeg())
+            ws.send_text(json.dumps({"type": "ask", "text": "guarda esse quadro pra mim", "id": "q9"}))
+            final = recv_until(ws, "answer")[-1]
+    assert final["saved"] is True
+    assert len(fake.chat_bodies) == 2  # spoken answer + the note
+    note_call = fake.chat_bodies[1]
+    assert note_call["model"] == Settings().model_careful
+    assert note_call["messages"][0]["content"].startswith("Você recebe uma foto")
+    imgs = list((tmp_path / "diario" / "img").rglob("*.jpg"))
+    assert len(imgs) == 1 and imgs[0].name.endswith("-q9.jpg")
+    text = next((tmp_path / "diario").glob("*.md")).read_text()
+    assert "· guardado" in text and "### Nota" in text and f"](img/{imgs[0].parent.name}/{imgs[0].name})" in text
+
+
+def test_journal_save_without_frame_is_plain(tmp_path):
+    c, fake = make(tmp_path)
+    with c:
+        r = c.post("/v1/ask", headers={"X-API-Key": TOKEN}, data={"question": "anota isso"})
+    assert r.json()["saved"] is False and len(fake.chat_bodies) == 1
+
+
+def test_journal_off(tmp_path):
+    fake = FakeDI()
+    s = Settings(deepinfra_key="k", api_token=TOKEN, data_dir=tmp_path, journal=False)
+    with TestClient(create_app(s, transport=httpx.MockTransport(fake))) as c:
+        c.post("/v1/ask", headers={"X-API-Key": TOKEN}, data={"question": "oi"})
+    assert not (tmp_path / "diario").exists()
+
+
+def test_wants_save():
+    from venus_lens.journal import wants_save
+    for q in ("guarda isso", "Anota o quadro", "salva essa página", "lembra disso depois", "registra aí"):
+        assert wants_save(q), q
+    for q in ("o que é isso?", "onde fica o guardanapo?", "o salvador é longe?", "qual o registro?"):
+        assert not wants_save(q), q
+
+
 def test_pick_model_and_sniff():
     st = Settings()
     assert pick_model(st, "o que é isso?", "auto") == st.model_fast
